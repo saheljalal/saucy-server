@@ -7,8 +7,8 @@ const middlewares = jsonServer.defaults()
 server.use(middlewares)
 server.use(jsonServer.bodyParser)
 server.use((req, res, next) => {
-  // post requests just send back the same data sent
-  if (req.method === 'POST') {
+  // non-get requests just send back the same data sent
+  if (['POST', 'DELETE', 'PUT', 'PATCH'].includes(req.method)) {
     res.jsonp(req.body)
   } else {
     next()
@@ -23,8 +23,6 @@ router.render = (req, res) => {
     result[keyPath] = res.locals.data
   }
   res.jsonp(result)
-
-  // reset db
 }
 
 server.use(jsonServer.rewriter({
