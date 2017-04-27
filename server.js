@@ -26,8 +26,7 @@ router.render = (req, res) => {
 }
 
 server.use(jsonServer.rewriter({
-  '/api/': '/',
-  '/companies/:cid/users/:uid': '/users/:uid'
+  '/api/': '/'
 }))
 
 server.use(router)
