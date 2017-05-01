@@ -17,10 +17,24 @@ server.use((req, res, next) => {
 
 router.render = (req, res) => {
   var result = res.locals.data
-  var keyPath = req.originalUrl.split('=')[1]
-  if (keyPath === 'keyPath') {
-    result = {}
-    result[keyPath] = res.locals.data
+  var query = req.originalUrl.split('?')[1]
+  if (query !== undefined) {
+    var tuple = query.split('=')
+    var key = tuple[0]
+    var value = tuple[1]
+    if (key === 'keyPath') {
+      var node = {}
+      var lastNode = null
+      var lastPath = null
+      result = node
+      value.split('.').forEach((path) => {
+        lastNode = node
+        lastPath = path
+        node[path] = {}
+        node = node[path]
+      })
+      lastNode[lastPath] = res.locals.data
+    }
   }
   res.jsonp(result)
 }
